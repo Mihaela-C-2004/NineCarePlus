@@ -1,0 +1,46 @@
+// Doar FRUCTE, cu dimensiuni APROXIMATIVE (până în săptămâna 20, de la cap la șezut; apoi de la cap la călcâie).
+// Ilustrațiile: Microsoft Fluent Emoji 3D (licență MIT). "color" colorează cercul din jurul fructului.
+export const FRUITS = {
+  4: { img: '/img/green-apple.png', name: 'o sămânță de măr', size: '0,1 cm', weight: 'sub 1 g', color: '#8CC152' },
+  5: { img: '/img/orange.png', name: 'o sămânță de portocală', size: '0,2 cm', weight: 'sub 1 g', color: '#F39A2E' },
+  6: { img: '/img/grapes.png', name: 'o boabă de coacăză', size: '0,6 cm', weight: 'sub 1 g', color: '#9A6FC2' },
+  7: { img: '/img/blueberries.png', name: 'o afină', size: '1,3 cm', weight: 'sub 1 g', color: '#6F7FCF' },
+  8: { img: '/img/cherries.png', name: 'o cireașă', size: '1,6 cm', weight: '1 g', color: '#D9576A' },
+  9: { img: '/img/grapes.png', name: 'o boabă de strugure', size: '2,3 cm', weight: '2 g', color: '#9A6FC2' },
+  10: { img: '/img/strawberry.png', name: 'o căpșună', size: '3,1 cm', weight: '4 g', color: '#E2575B' },
+  11: { img: '/img/peach.png', name: 'o caisă', size: '4,1 cm', weight: '7 g', color: '#F2A65A' },
+  12: { img: '/img/kiwi.png', name: 'un kiwi', size: '5,4 cm', weight: '14 g', color: '#8DB65A' },
+  13: { img: '/img/lemon.png', name: 'o lămâie', size: '7,4 cm', weight: '23 g', color: '#E9C73F' },
+  14: { img: '/img/peach.png', name: 'o piersică', size: '8,7 cm', weight: '43 g', color: '#F0A070' },
+  15: { img: '/img/apple.png', name: 'un măr', size: '10 cm', weight: '70 g', color: '#D9534F' },
+  16: { img: '/img/avocado.png', name: 'un avocado', size: '11,6 cm', weight: '100 g', color: '#7FA653' },
+  17: { img: '/img/pear.png', name: 'o pară', size: '13 cm', weight: '140 g', color: '#B8C24F' },
+  18: { img: '/img/orange.png', name: 'o portocală', size: '14,2 cm', weight: '190 g', color: '#F39A2E' },
+  19: { img: '/img/mango.png', name: 'un mango mic', size: '15,3 cm', weight: '240 g', color: '#F2A33C' },
+  20: { img: '/img/banana.png', name: 'o banană', size: '25 cm', weight: '300 g', color: '#EBC94B' },
+  21: { img: '/img/orange.png', name: 'un grepfrut', size: '26,7 cm', weight: '360 g', color: '#F28C3A' },
+  22: { img: '/img/mango.png', name: 'un mango mare', size: '27,8 cm', weight: '430 g', color: '#F2A33C' },
+  23: { img: '/img/pear.png', name: 'o gutuie', size: '28,9 cm', weight: '500 g', color: '#D4C24A' },
+  24: { img: '/img/pineapple.png', name: 'un ananas mic', size: '30 cm', weight: '600 g', color: '#E2B53E' },
+  25: { img: '/img/coconut.png', name: 'o nucă de cocos', size: '34,6 cm', weight: '660 g', color: '#9C7A5B' },
+  26: { img: '/img/melon.png', name: 'un pepene galben mic', size: '35,6 cm', weight: '760 g', color: '#C9D07A' },
+  27: { img: '/img/pineapple.png', name: 'un ananas', size: '36,6 cm', weight: '875 g', color: '#E2B53E' },
+  28: { img: '/img/coconut.png', name: 'o nucă de cocos mare', size: '37,6 cm', weight: '1 kg', color: '#9C7A5B' },
+  29: { img: '/img/melon.png', name: 'un pepene galben', size: '38,6 cm', weight: '1,15 kg', color: '#C6CC6E' },
+  30: { img: '/img/pineapple.png', name: 'un ananas mare', size: '39,9 cm', weight: '1,3 kg', color: '#D9AC3A' },
+  31: { img: '/img/melon.png', name: 'un pepene galben mare', size: '41,1 cm', weight: '1,5 kg', color: '#BDC566' },
+  32: { img: '/img/watermelon.png', name: 'un pepene verde mic', size: '42,4 cm', weight: '1,7 kg', color: '#5FA36A' },
+  33: { img: '/img/melon.png', name: 'un pepene galben uriaș', size: '43,7 cm', weight: '1,9 kg', color: '#B8C060' },
+  34: { img: '/img/pineapple.png', name: 'un ananas uriaș', size: '45 cm', weight: '2,1 kg', color: '#D9AC3A' },
+  35: { img: '/img/watermelon.png', name: 'un pepene verde mic', size: '46,2 cm', weight: '2,4 kg', color: '#5FA36A' },
+  36: { img: '/img/watermelon.png', name: 'un pepene verde', size: '47,4 cm', weight: '2,6 kg', color: '#58A065' },
+  37: { img: '/img/watermelon.png', name: 'un pepene verde', size: '48,6 cm', weight: '2,9 kg', color: '#56A064' },
+  38: { img: '/img/watermelon.png', name: 'un pepene verde mare', size: '49,8 cm', weight: '3,1 kg', color: '#4F9A5F' },
+  39: { img: '/img/watermelon.png', name: 'un pepene verde mare', size: '50,7 cm', weight: '3,3 kg', color: '#4F9A5F' },
+  40: { img: '/img/watermelon.png', name: 'un pepene verde uriaș', size: '51,2 cm', weight: '3,4 kg', color: '#4A955A' },
+};
+
+export function fruitForWeek(week) {
+  const w = Math.min(40, Math.max(4, week));
+  return { week: w, ...FRUITS[w] };
+}
