@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { api } from '../lib/api.js';
 import { Logo, ThemeToggle, Segmented } from '../components/ui.jsx';
+import { LangToggle } from '../i18n/index.jsx';
 
 const thisYear = new Date().getFullYear();
 
@@ -38,6 +39,7 @@ export default function Auth({ onDone }) {
   return (
     <main className="m-shell auth">
       <div className="auth-top">
+        <LangToggle />
         <ThemeToggle />
       </div>
       <div className="auth-hero">

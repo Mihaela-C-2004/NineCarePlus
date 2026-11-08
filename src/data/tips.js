@@ -25,3 +25,25 @@ export function tipOfTheDay(list, date = new Date()) {
   const dayIndex = Math.floor(date.getTime() / 86400000);
   return list[dayIndex % list.length];
 }
+
+export const PREGNANCY_TIPS_EN = [
+  'Write down questions as they come to mind, so you don’t forget them at your check-up.',
+  'Drink water often, a little at a time, throughout the day.',
+  'A short, relaxed walk can help you feel better. Ask your doctor which activity suits you.',
+  'Rest matters. If you can, take a short break in the middle of the day.',
+  'Bring your recent lab results to every check-up, or send them from the app.',
+  'If something feels unusual, it’s fine to ask. That’s what your clinic is for.',
+  'Smaller, more frequent meals are often easier than three big ones.',
+  'Tell the people close to you how they can help. You don’t have to do it all alone.',
+  'Write down your questions for the next check-up in the Clinic section.',
+  'Keep the medicines your doctor recommended somewhere visible, so you don’t forget them.',
+];
+
+export const POSTPARTUM_TIPS_EN = [
+  'Recovering after birth takes time. Be gentle with yourself.',
+  'Sleep when your baby sleeps, at least once a day.',
+  'Hard days are normal. If the sadness doesn’t pass, tell your doctor.',
+  'Accept help from family and friends.',
+  'Eat regularly and drink enough water, especially if you’re breastfeeding.',
+  'Write down your recovery questions for your post-birth check-up.',
+];

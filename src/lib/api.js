@@ -1,4 +1,6 @@
 const TOKEN_KEY = '9care.token';
+import { getLang } from '../i18n/index.jsx';
+
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 export const setToken = (t) => (t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY));
 
@@ -37,13 +39,13 @@ export const api = {
   toggleLesson: (lessonId) => request('POST', '/api/me/progress', { lessonId }),
   addQuestion: (text) => request('POST', '/api/me/questions', { text }),
   deleteQuestion: (id) => request('DELETE', `/api/me/questions/${id}`),
-  ask: (question) => request('POST', '/api/assistant', { question }),
-  content: () => request('GET', '/api/content'),
+  ask: (question) => request('POST', '/api/assistant', { question, lang: getLang() }),
+  content: () => request('GET', `/api/content?lang=${getLang()}`),
   info: () => request('GET', '/api/info'),
   // Clinica
   overview: (code) => request('GET', `/api/clinic/${code}/overview`),
   updateClinic: (code, b) => request('PATCH', `/api/clinic/${code}`, b),
-  patient: (id) => request('GET', `/api/clinic/patients/${id}`),
+  patient: (id) => request('GET', `/api/clinic/patients/${id}?lang=${getLang()}`),
   updatePatient: (id, b) => request('PATCH', `/api/clinic/patients/${id}`, b),
   addAppointment: (id, b) => request('POST', `/api/clinic/patients/${id}/appointments`, b),
   setRequestStatus: (id, status) => request('PATCH', `/api/clinic/requests/${id}`, { status }),

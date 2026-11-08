@@ -1,11 +1,13 @@
-import { fruitForWeek } from '../data/fruits.js';
+import { fruitForWeek, FRUIT_EN } from '../data/fruits.js';
+import { useLang } from '../i18n/index.jsx';
 import { babyStage } from '../data/baby.js';
-import { PREGNANCY_TIPS, POSTPARTUM_TIPS, tipOfTheDay } from '../data/tips.js';
+import { PREGNANCY_TIPS, POSTPARTUM_TIPS, PREGNANCY_TIPS_EN, POSTPARTUM_TIPS_EN, tipOfTheDay } from '../data/tips.js';
 import { daysUntil, localDate, longDate, plural } from '../lib/dates.js';
 import { STATUS } from '../components/ui.jsx';
 
 export default function Home({ data, content, go }) {
   const { me, checkins, requests, clinic } = data;
+  const en = useLang() === 'en';
 
   if (me.status === 'incheiata') {
     return (
@@ -27,8 +29,8 @@ export default function Home({ data, content, go }) {
 
   let hero;
   if (postpartum) {
-    const b = babyStage(me.birthDate);
-    const name = me.babyName || 'Bebelușul tău';
+    const b = babyStage(me.birthDate, en);
+    const name = me.babyName || (en ? 'Your baby' : 'Bebelușul tău');
     hero = (
       <div className="hero" style={{ '--fruit': 'var(--accent)' }}>
         <div className="orb">
@@ -40,8 +42,8 @@ export default function Home({ data, content, go }) {
           <img className="toy-img" src={b.toy} alt="" />
         </div>
         <p className="baby-name">{name}</p>
-        <p className="hero-line">are {b.age}.</p>
-        <p className="hero-sub">{b.text} Fiecare copil are ritmul lui.</p>
+        <p className="hero-line" data-i18n-skip>{en ? `is ${b.age}.` : `are ${b.age}.`}</p>
+        <p className="hero-sub" data-i18n-skip>{b.text} {en ? 'Every child grows at their own pace.' : 'Fiecare copil are ritmul lui.'}</p>
       </div>
     );
   } else {
@@ -56,10 +58,11 @@ export default function Home({ data, content, go }) {
           </svg>
           <img key={fruit.img} className="fruit-img" src={fruit.img} alt={fruit.name} />
         </div>
-        <p className="hero-line">Bebelușul tău e cât {fruit.name}.</p>
-        <p className="hero-sub">
-          Aproximativ {fruit.size} și {fruit.weight}.{' '}
-          {daysLeft > 0 ? `Mai sunt ${plural(daysLeft, 'zi', 'zile')} până la data estimată.` : 'Ai ajuns la data estimată.'}
+        <p className="hero-line" data-i18n-skip>{en ? `Your baby is the size of ${FRUIT_EN[fruit.name]}.` : `Bebelușul tău e cât ${fruit.name}.`}</p>
+        <p className="hero-sub" data-i18n-skip>
+          {en
+            ? `About ${fruit.size.replace(',', '.')} and ${fruit.weight.replace(',', '.').replace('sub', 'under')}. ${daysLeft > 0 ? `${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} to go until your due date.` : "You've reached your due date."}`
+            : `Aproximativ ${fruit.size} și ${fruit.weight}. ${daysLeft > 0 ? `Mai sunt ${plural(daysLeft, 'zi', 'zile')} până la data estimată.` : 'Ai ajuns la data estimată.'}`}
         </p>
       </div>
     );
@@ -69,7 +72,11 @@ export default function Home({ data, content, go }) {
     <section className="home">
       <div className="home-top">
         <h1 className="hello">Bună, {me.firstName}</h1>
-        <p className="today">{postpartum ? `Te însoțim până pe ${longDate(me.accessUntil)}` : `Săptămâna ${me.week}, ziua ${me.weekDay}`}</p>
+        <p className="today" data-i18n-skip>
+          {postpartum
+            ? en ? `We're with you until ${longDate(me.accessUntil)}` : `Te însoțim până pe ${longDate(me.accessUntil)}`
+            : en ? `Week ${me.week}, day ${me.weekDay}` : `Săptămâna ${me.week}, ziua ${me.weekDay}`}
+        </p>
       </div>
 
       <div className="home-grid">
@@ -96,7 +103,7 @@ export default function Home({ data, content, go }) {
 
           <article className="tip">
             <h2>Sfatul zilei</h2>
-            <p>{tipOfTheDay(postpartum ? POSTPARTUM_TIPS : PREGNANCY_TIPS)}</p>
+            <p data-i18n-skip>{tipOfTheDay(postpartum ? (en ? POSTPARTUM_TIPS_EN : POSTPARTUM_TIPS) : en ? PREGNANCY_TIPS_EN : PREGNANCY_TIPS)}</p>
           </article>
 
           <div className="shortcuts">

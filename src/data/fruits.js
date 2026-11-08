@@ -44,3 +44,41 @@ export function fruitForWeek(week) {
   const w = Math.min(40, Math.max(4, week));
   return { week: w, ...FRUITS[w] };
 }
+
+/** Numele fructelor în engleză. */
+export const FRUIT_EN = {
+  'o sămânță de măr': 'an apple seed',
+  'o sămânță de portocală': 'an orange seed',
+  'o boabă de coacăză': 'a currant',
+  'o afină': 'a blueberry',
+  'o cireașă': 'a cherry',
+  'o boabă de strugure': 'a grape',
+  'o căpșună': 'a strawberry',
+  'o caisă': 'an apricot',
+  'un kiwi': 'a kiwi',
+  'o lămâie': 'a lemon',
+  'o piersică': 'a peach',
+  'un măr': 'an apple',
+  'un avocado': 'an avocado',
+  'o pară': 'a pear',
+  'o portocală': 'an orange',
+  'un mango mic': 'a small mango',
+  'o banană': 'a banana',
+  'un grepfrut': 'a grapefruit',
+  'un mango mare': 'a large mango',
+  'o gutuie': 'a quince',
+  'un ananas mic': 'a small pineapple',
+  'o nucă de cocos': 'a coconut',
+  'un pepene galben mic': 'a small melon',
+  'un ananas': 'a pineapple',
+  'o nucă de cocos mare': 'a large coconut',
+  'un pepene galben': 'a melon',
+  'un ananas mare': 'a large pineapple',
+  'un pepene galben mare': 'a large melon',
+  'un pepene verde mic': 'a small watermelon',
+  'un pepene galben uriaș': 'a huge melon',
+  'un ananas uriaș': 'a huge pineapple',
+  'un pepene verde': 'a watermelon',
+  'un pepene verde mare': 'a large watermelon',
+  'un pepene verde uriaș': 'a huge watermelon',
+};

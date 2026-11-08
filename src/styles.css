@@ -1765,3 +1765,12 @@ body {
   border-radius: 12px;
   padding: 0.55rem 0.5rem;
 }
+
+/* Butonul RO / EN */
+.lang-toggle {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--primary);
+}

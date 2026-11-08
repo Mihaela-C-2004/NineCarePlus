@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { Icon } from '../components/ui.jsx';
+import { useLang } from '../i18n/index.jsx';
 
 const norm = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-const SUGGESTIONS = ['greață', 'bagaj', 'alăptare', 'analize', 'somn', 'cerere'];
+const SUGGESTIONS = { ro: ['greață', 'bagaj', 'alăptare', 'analize', 'somn', 'cerere'], en: ['nausea', 'bag', 'breastfeeding', 'lab', 'sleep', 'baby'] };
 
 function buildIndex(data, content) {
   const items = [
@@ -34,6 +35,7 @@ function snippet(body, term) {
 
 export default function Search({ data, content, query, setQuery, go, autoFocus }) {
   const input = useRef(null);
+  const lang = useLang();
   useEffect(() => {
     if (autoFocus) input.current?.focus();
   }, [autoFocus]);
@@ -56,7 +58,7 @@ export default function Search({ data, content, query, setQuery, go, autoFocus }
 
       {!terms.length && (
         <div className="chips">
-          {SUGGESTIONS.map((s) => <button key={s} className="chip" onClick={() => setQuery(s)}>{s}</button>)}
+          {SUGGESTIONS[lang].map((s) => <button key={s} data-i18n-skip className="chip" onClick={() => setQuery(s)}>{s}</button>)}
         </div>
       )}
 

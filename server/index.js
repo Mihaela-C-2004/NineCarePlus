@@ -5,7 +5,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createSeed } from './seed.js';
 import { ARTICLES, COURSES, OFFERS } from './content.js';
-import { answer, summarize } from './assistant.js';
+import { answer, summarize, ruleSummary } from './assistant.js';
+import { ARTICLES_EN, COURSES_EN, OFFERS_EN } from './content.en.js';
 import {
   id, token, localDate, addDays, pregnancyDay, hashPassword, checkPassword,
   isMinor, accessUntil, accessExpired,
@@ -308,17 +309,18 @@ app.delete('/api/me/questions/:id', auth, (req, res) => {
 app.post('/api/assistant', auth, async (req, res) => {
   const q = String(req.body?.question || '').trim();
   if (!q) return fail(res, 400, 'Scrie întrebarea.');
-  res.json(await answer(q.slice(0, 800)));
+  res.json(await answer(q.slice(0, 800), req.body?.lang === 'en' ? 'en' : 'ro'));
 });
 
 /** Cursurile, ghidurile și ofertele. Conversațiile cu asistentul NU se salvează și nu ajung la clinică. */
 app.get('/api/content', auth, (req, res) => {
   const m = req.mother;
   const ended = m.status === 'incheiata';
+  const en = req.query.lang === 'en';
   res.json({
-    courses: COURSES.filter((c) => !(ended && c.sarcina)),
-    articles: ARTICLES.map(({ cuvinte, ...a }) => a),
-    offers: m.consents.offers && !isMinor(m.birthYear) && !ended ? OFFERS : [],
+    courses: (en ? COURSES_EN : COURSES).filter((c) => !(ended && c.sarcina)),
+    articles: (en ? ARTICLES_EN : ARTICLES).map(({ cuvinte, ...a }) => a),
+    offers: m.consents.offers && !isMinor(m.birthYear) && !ended ? (en ? OFFERS_EN : OFFERS) : [],
   });
 });
 
@@ -383,6 +385,12 @@ app.get('/api/clinic/patients/:id', (req, res) => {
     b.noConsent = true;
   }
   delete b.questions; // întrebările pentru control sunt notițele mamei
+  // Rezumatele făcute după reguli se refac în limba panoului; cele scrise de AI rămân cum sunt.
+  if (req.query.lang === 'en') {
+    b.requests = b.requests.map((r) =>
+      r.summaryAi ? r : { ...r, summary: ruleSummary(r.includeEvolution ? checkinsOf(m.id, 14) : [], r, 'en') }
+    );
+  }
   res.json(b);
 });
 

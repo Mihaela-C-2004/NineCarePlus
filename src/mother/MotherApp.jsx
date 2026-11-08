@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { api, getToken, setToken, subscribe } from '../lib/api.js';
 import { Icon, Logo, ThemeToggle } from '../components/ui.jsx';
+import { LangToggle, useLang } from '../i18n/index.jsx';
 import Auth from './Auth.jsx';
 import Home from './Home.jsx';
 import MyState from './MyState.jsx';
@@ -41,6 +42,7 @@ export default function MotherApp() {
   const [query, setQuery] = useState('');
   const [intents, setIntents] = useState({});
   useBabyTheme(data?.me);
+  const lang = useLang();
 
   const signOut = useCallback(() => {
     setToken(null);
@@ -68,7 +70,7 @@ export default function MotherApp() {
 
   useEffect(() => {
     if (hasToken) refresh();
-  }, [hasToken, refresh]);
+  }, [hasToken, refresh, lang]);
 
   useEffect(
     () =>
@@ -139,6 +141,7 @@ export default function MotherApp() {
           <button className="icon-btn search-icon" onClick={() => setPage(page === 'search' ? null : 'search')} aria-label={page === 'search' ? 'Închide căutarea' : 'Caută'}>
             <Icon name={page === 'search' ? 'close' : 'search'} />
           </button>
+          <LangToggle />
           <ThemeToggle />
           <button className="icon-btn avatar" onClick={() => setPage('profile')} aria-label="Profilul meu">
             {data.me.firstName.charAt(0).toUpperCase()}

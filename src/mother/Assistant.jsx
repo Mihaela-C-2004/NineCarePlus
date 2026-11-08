@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { api } from '../lib/api.js';
 import { Icon } from '../components/ui.jsx';
+import { useLang } from '../i18n/index.jsx';
 
-const SUGGESTIONS = ['Ce ajută la greață?', 'Ce iau în bagajul pentru maternitate?', 'Cum arată primele zile de alăptare?', 'Am dureri de spate, e normal?'];
+const SUGGESTIONS = {
+  ro: ['Ce ajută la greață?', 'Ce iau în bagajul pentru maternitate?', 'Cum arată primele zile de alăptare?', 'Am dureri de spate, e normal?'],
+  en: ['What helps with nausea?', 'What should I pack for the hospital?', 'What are the first days of breastfeeding like?', 'My back hurts, is that normal?'],
+};
 
 export default function Assistant({ content, go, chat, setChat, intent, clearIntent }) {
   const [q, setQ] = useState('');
+  const lang = useLang();
   const [busy, setBusy] = useState(false);
   const [article, setArticle] = useState(null);
   const end = useRef(null);
@@ -57,17 +62,17 @@ export default function Assistant({ content, go, chat, setChat, intent, clearInt
         </div>
         {chat.length === 0 && (
           <div className="chips suggestions">
-            {SUGGESTIONS.map((s) => <button key={s} className="chip" onClick={() => ask(s)}>{s}</button>)}
+            {SUGGESTIONS[lang].map((s) => <button key={s} data-i18n-skip className="chip" onClick={() => ask(s)}>{s}</button>)}
           </div>
         )}
         {chat.map((m, i) =>
           m.from === 'me' ? (
-            <div key={i} className="bubble me">{m.text}</div>
+            <div key={i} className="bubble me" data-i18n-skip>{m.text}</div>
           ) : (
             <div key={i} className="bubble bot">
               {m.type === 'answer' && (
                 <>
-                  <p>{m.text}</p>
+                  <p data-i18n-skip>{m.text}</p>
                   <div className="sources">
                     {m.sources.map((s) => (
                       <button key={s.id} className="source" onClick={() => setArticle(s.id)}>📖 {s.titlu}</button>

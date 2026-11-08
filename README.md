@@ -9,6 +9,7 @@
 - **Căutare**: bara din antet (pe telefon, iconița cu lupa) caută în ghiduri, lecții, secțiuni și cererile proprii.
 - **După naștere**: apar numele bebelușului și bebelușul, care „crește” lună de lună; culorile devin roz sau albastre după genul ales.
 - **Programările nu se fac din aplicație**: rămân telefonice.
+- **Română / engleză**: butonul **EN / RO** din antet (și de pe pagina de înscriere) schimbă limba. Alegerea se păstrează pe dispozitiv.
 
 ## Pornire
 
@@ -72,6 +73,12 @@ Asistentul răspunde **doar** din articolele aprobate (`server/content.js`) și 
 | Culorile (zi și noapte) | începutul `src/styles.css` |
 | Logoul | `src/components/ui.jsx` și `public/logo.svg` |
 | Ilustrațiile fructelor și ale bebelușului | `public/img/` și `src/data/fruits.js`, `src/data/baby.js` |
+
+## Traducerea în engleză
+
+- Textele interfeței se traduc din dicționarul `src/i18n/en.js` (cheia e textul românesc, valoarea e cel englezesc). **Când adăugați un text nou în aplicație, adăugați și perechea lui acolo**; altfel rămâne în română.
+- Articolele, cursurile și ofertele în engleză sunt în `server/content.en.js`. Asistentul caută în articolele din limba aleasă.
+- Mesajele scrise de mame și de medici nu se traduc: rămân în limba în care au fost scrise.
 
 ## Licențe
 

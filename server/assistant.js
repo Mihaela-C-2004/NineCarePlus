@@ -1,4 +1,5 @@
 import { ARTICLES } from './content.js';
+import { ARTICLES_EN } from './content.en.js';
 
 /**
  * Asistentul răspunde DOAR din articolele aprobate.
@@ -9,14 +10,14 @@ import { ARTICLES } from './content.js';
  */
 const norm = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 const STOP = new Set(
-  'care este sunt pentru sau dar cum cand unde din despre mai foarte acum asta acest aceasta poate pot trebuie normal fie imi mie meu mea eu tu ai am are nu da cat cate ceva bine rau zile azi'.split(' ')
+  'the and for with what how when why are is was can should does this that have has your you my me am its about care este sunt pentru sau dar cum cand unde din despre mai foarte acum asta acest aceasta poate pot trebuie normal fie imi mie meu mea eu tu ai am are nu da cat cate ceva bine rau zile azi'.split(' ')
 );
 const words = (s) => norm(s).split(/[^a-z0-9]+/).filter((w) => w.length >= 3 && !STOP.has(w));
 const stem = (w) => w.slice(0, 5);
 
-export function findArticles(question, n = 3) {
+export function findArticles(question, n = 3, list = ARTICLES) {
   const q = new Set(words(question).map(stem));
-  return ARTICLES.map((a) => {
+  return list.map((a) => {
     const title = new Set(words(a.titlu).map(stem));
     const keys = new Set(a.cuvinte.flatMap((k) => words(k)).map(stem));
     const body = new Set(words(a.text).map(stem));
@@ -38,9 +39,12 @@ const PERSONAL = /\b(am|ma|imi|mi|simt|doare|eu|mie|meu|mea|sunt|bebelusul meu|c
 const SYMPTOM =
   /(durer|doare|dureri|sanger|febr|cramp|contracti|ameti|amete|varsat|vomit|umfl|vedere|nu (mai )?simt|se misca mai putin|lichid|pierderi|mancarim|arsur|lesin|tensiun|cazut|lovit|sufoc|respir)/;
 
-export const isPersonalSymptom = (q) => {
+const PERSONAL_EN = /\b(i|i'm|im|my|me|i've|ive|baby is|my baby)\b/;
+const SYMPTOM_EN = /(pain|hurt|ache|bleed|fever|cramp|contraction|dizz|vomit|swell|vision|not moving|moving less|fluid|leak|itch|burn|faint|blood pressure|fell|fall|breath)/;
+
+export const isPersonalSymptom = (q, lang = 'ro') => {
   const n = norm(q);
-  return SYMPTOM.test(n) && PERSONAL.test(n);
+  return lang === 'en' ? SYMPTOM_EN.test(n) && PERSONAL_EN.test(n) : SYMPTOM.test(n) && PERSONAL.test(n);
 };
 
 const ASSISTANT_RULES = `Ești asistentul aplicației 9Care+ pentru gravide și mame. Răspunzi în limba română, pe scurt (maximum 5 propoziții), DOAR pe baza articolelor primite.
@@ -73,14 +77,14 @@ async function callModel(system, content, maxTokens = 500) {
     .trim();
 }
 
-export async function answer(question) {
-  if (isPersonalSymptom(question)) return { type: 'refer' };
-  const found = findArticles(question);
+export async function answer(question, lang = 'ro') {
+  if (isPersonalSymptom(question, lang)) return { type: 'refer' };
+  const found = findArticles(question, 3, lang === 'en' ? ARTICLES_EN : ARTICLES);
   if (!found.length) return { type: 'none' };
   const sources = found.map((a) => ({ id: a.id, titlu: a.titlu }));
   try {
     const text = await callModel(
-      ASSISTANT_RULES,
+      lang === 'en' ? ASSISTANT_RULES.replace('Răspunzi în limba română', 'Răspunzi în limba engleză') : ASSISTANT_RULES,
       `Articole aprobate:\n\n${found.map((a) => `[${a.titlu}]\n${a.text}`).join('\n\n')}\n\nÎntrebarea: ${question}`
     );
     if (text) {
@@ -100,7 +104,8 @@ const avg = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : nul
 const f = (n) => n.toLocaleString('ro-RO', { maximumFractionDigits: 1 });
 
 /** Rezumat calculat după reguli simple, folosit când nu există cheie AI. Doar fapte raportate, fără interpretări. */
-export function ruleSummary(checkins, request) {
+export function ruleSummary(checkins, request, lang = 'ro') {
+  if (lang === 'en') return ruleSummaryEn(checkins, request);
   const lines = [];
   if (!request.includeEvolution) {
     lines.push('Pacienta nu a atașat evoluția ultimelor 14 zile.');
@@ -126,6 +131,25 @@ export function ruleSummary(checkins, request) {
     const note = [...checkins].reverse().find((c) => c.note);
     if (note) lines.push(`Ultima notă: „${note.note}”`);
   }
+  return lines.join('\n');
+}
+
+function ruleSummaryEn(checkins, request) {
+  const n = (x) => x.toLocaleString('en-GB', { maximumFractionDigits: 1 });
+  if (!request.includeEvolution) return 'The patient did not attach her last 14 days.';
+  if (!checkins.length) return 'No check-ins in the last 14 days.';
+  const lines = [];
+  const pains = checkins.map((c) => c.pain);
+  const max = Math.max(...pains);
+  const maxDay = checkins.find((c) => c.pain === max).date.slice(5).split('-').reverse().join('/');
+  const last3 = checkins.slice(-3);
+  const earlier = checkins.slice(0, -3);
+  lines.push(`${checkins.length === 1 ? '1 check-in' : `${checkins.length} check-ins`} in 14 days. Average pain ${n(avg(pains))}/10, highest ${max}/10 (${maxDay}).`);
+  if (earlier.length) lines.push(`Last 3 days: average pain ${n(avg(last3.map((c) => c.pain)))}/10, compared with ${n(avg(earlier.map((c) => c.pain)))}/10 before.`);
+  const bad = checkins.filter((c) => c.sleep === 1).length;
+  lines.push(`Average mood over the last 3 days: ${n(avg(last3.map((c) => c.mood)))} out of 5. Sleep reported as “bad” on ${bad} ${bad === 1 ? 'day' : 'days'}.`);
+  const note = [...checkins].reverse().find((c) => c.note);
+  if (note) lines.push(`Latest note: “${note.note}”`);
   return lines.join('\n');
 }
 

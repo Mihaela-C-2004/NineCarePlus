@@ -4,6 +4,7 @@ import { api, subscribe } from '../lib/api.js';
 import { longDate, shortDate, timeAgo, weeksSince } from '../lib/dates.js';
 import { EvolutionChart, Logo, Segmented, STATUS, ThemeToggle } from '../components/ui.jsx';
 import { flagOf } from '../lib/ocr.js';
+import { LangToggle, useLang } from '../i18n/index.jsx';
 
 const CODE = 'DEMO';
 const stage = (p) =>
@@ -19,6 +20,8 @@ export default function ClinicApp() {
   const sel = useRef({});
   sel.current = { requestId, patientId };
   const [version, setVersion] = useState(0);
+  const lang = useLang();
+  useEffect(() => setVersion((v) => v + 1), [lang]);
 
   const load = useCallback(async () => {
     try {
@@ -77,6 +80,7 @@ export default function ClinicApp() {
           ]}
         />
         <div className="header-actions">
+          <LangToggle />
           <ThemeToggle />
           <button className="btn btn-soft" onClick={reset}>Resetează demo</button>
         </div>
