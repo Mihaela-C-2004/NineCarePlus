@@ -217,7 +217,7 @@ function Patients({ ov, patientId, setPatientId, version }) {
         <p className="fine-print">Ordonarea doar afișează datele. Nu e o alertă automată.</p>
         {sorted.map((p) => (
           <button key={p.id} className={`c-row ${p.id === patientId ? 'on' : ''}`} onClick={() => setPatientId(p.id)}>
-            <span className="c-row-top"><strong>{p.firstName} {p.lastName}</strong>{p.minor && <span className="status-pill s-minor">Minoră</span>}</span>
+            <span className="c-row-top"><strong>{p.firstName} {p.lastName}</strong>{p.minor && <span className="status-pill s-minor">Minoră</span>}{p.demoClone && <span className="status-pill s-vazuta">Demo</span>}</span>
             <span className="muted">{stage(p)}</span>
             <span className="muted small">Ultimul check-in: {p.lastCheckin ? shortDate(p.lastCheckin) : '–'}. Durere maximă (7 zile): {p.maxPain7d ?? '–'}/10. Cereri deschise: {p.openRequests}.</span>
           </button>
@@ -309,7 +309,7 @@ function PatientView({ id, version }) {
 }
 
 function Admin({ ov, reload }) {
-  const [qr, setQr] = useState({ url: '', img: '' });
+  const [qr, setQr] = useState({ url: '', img: '', demoUrl: '', demoImg: '' });
   const [hours, setHours] = useState(ov.clinic.responseHours);
   const [saved, setSaved] = useState(false);
   const [ai, setAi] = useState(null);
@@ -317,8 +317,12 @@ function Admin({ ov, reload }) {
     api.info().then(({ ips, ai }) => {
       setAi(ai);
       const host = ['localhost', '127.0.0.1'].includes(location.hostname) && ips[0] ? ips[0] : location.hostname;
-      const url = `${location.protocol}//${host}${location.port ? `:${location.port}` : ''}/?clinica=${ov.clinic.code}`;
-      QRCode.toDataURL(url, { margin: 1, width: 360 }).then((img) => setQr({ url, img }));
+      const origin = `${location.protocol}//${host}${location.port ? `:${location.port}` : ''}`;
+      const url = `${origin}/?clinica=${ov.clinic.code}`;
+      const demoUrl = `${origin}/?demo`;
+      Promise.all([QRCode.toDataURL(url, { margin: 1, width: 360 }), QRCode.toDataURL(demoUrl, { margin: 1, width: 360 })]).then(([img, demoImg]) =>
+        setQr({ url, img, demoUrl, demoImg })
+      );
     });
   }, [ov.clinic.code]);
   const s = ov.stats;
@@ -329,6 +333,10 @@ function Admin({ ov, reload }) {
         {qr.img && <img src={qr.img} alt={`Cod QR pentru înscriere: ${qr.url}`} />}
         <p>Codul clinicii: <strong className="code">{ov.clinic.code}</strong></p>
         <small className="muted break">{qr.url}</small>
+        <h3>Demo direct, ca Ana</h3>
+        {qr.demoImg && <img src={qr.demoImg} alt={`Cod QR pentru demo: ${qr.demoUrl}`} />}
+        <p className="muted">Fiecare persoană primește propria copie a Anei, fără cont.</p>
+        <small className="muted break">{qr.demoUrl}</small>
       </section>
       <div className="stack">
         <div className="stats">

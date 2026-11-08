@@ -31,8 +31,12 @@ function useBabyTheme(me) {
   }, [me?.status, me?.babySex]);
 }
 
+// Linkul de demo: https://adresa/?demo (sau /demo) intră direct ca Ana, fără cont.
+const wantsDemo = () => new URLSearchParams(window.location.search).has('demo') || window.location.pathname.replace(/\/$/, '') === '/demo';
+
 export default function MotherApp() {
   const [hasToken, setHasToken] = useState(Boolean(getToken()));
+  const [demoLoading, setDemoLoading] = useState(() => wantsDemo() && !getToken());
   const [data, setData] = useState(null);
   const [content, setContent] = useState(null);
   const [tab, setTab] = useState('home');
@@ -97,6 +101,26 @@ export default function MotherApp() {
     setHasToken(true);
     setTab('home');
   };
+
+  useEffect(() => {
+    if (!wantsDemo()) return;
+    window.history.replaceState(null, '', '/');
+    if (getToken()) return; // vizitatorul are deja sesiunea lui de demo
+    api
+      .demo()
+      .then(onAuth)
+      .catch((e) => setError(e.message))
+      .finally(() => setDemoLoading(false));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (demoLoading) {
+    return (
+      <main className="m-shell center-screen">
+        <Logo size={48} />
+        <p className="muted">{error || 'Se încarcă…'}</p>
+      </main>
+    );
+  }
 
   if (!hasToken) return <Auth onDone={onAuth} />;
 

@@ -27,6 +27,7 @@ async function request(method, url, body) {
 export const api = {
   register: (b) => request('POST', '/api/auth/register', b),
   login: (b) => request('POST', '/api/auth/login', b),
+  demo: () => request('POST', '/api/auth/demo'),
   logout: () => request('POST', '/api/auth/logout'),
   me: () => request('GET', '/api/me'),
   updateMe: (b) => request('PATCH', '/api/me', b),

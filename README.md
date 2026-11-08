@@ -27,6 +27,15 @@ npm run dev
 
 Codul clinicii la înscriere: **DEMO**. Pe telefon (aceeași rețea Wi-Fi), scanează codul QR din panoul clinicii → **Administrare**.
 
+## Link de demo, fără cont
+
+Trimiteți oamenilor **`https://adresa-voastra/?demo`** (merge și `/demo`). Intră direct ca **Ana**, în săptămâna 28, cu 14 zile de istoric, fără înscriere.
+
+- Fiecare persoană primește **propria copie** a Anei, deci ce face unul nu le strică demo-ul celorlalți.
+- Copiile apar în panoul clinicii cu eticheta **Demo**; cererile trimise de ele ajung live la clinică.
+- Copiile mai vechi de 24 de ore se șterg singure.
+- Codul QR pentru acest link e în panoul clinicii → **Administrare**.
+
 ## Conturi demo (parola: `demo1234`)
 
 | Cont | Situația |

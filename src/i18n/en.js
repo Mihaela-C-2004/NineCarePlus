@@ -381,6 +381,10 @@ export const EN = {
   'Luni–Vineri, 8:00–20:00': 'Monday–Friday, 8:00–20:00',
   'Sarcina s-a încheiat.': 'Pregnancy ended.',
 
+  'Demo direct, ca Ana': 'Direct demo, as Ana',
+  'Fiecare persoană primește propria copie a Anei, fără cont.': 'Everyone gets their own copy of Ana, no account needed.',
+  'Demo-ul e plin acum. Încearcă din nou peste câteva minute.': 'The demo is full right now. Please try again in a few minutes.',
+
   // Mesaje de la server
   'Sesiunea a expirat. Intră din nou în cont.': 'Your session has expired. Please log in again.',
   'Scrie-ți prenumele.': 'Please enter your first name.',
@@ -434,6 +438,7 @@ export const PATTERNS = [
   [/^Șterge: (.+)$/, 'Delete: $1'],
   [/^Cereri \((\d+) noi\)$/, 'Requests ($1 new)'],
   [/^Valoare (.+)$/, 'Value $1'],
+  [/^Cod QR pentru demo: (.+)$/, 'Demo QR code: $1'],
   [/^Status: (.+)$/, 'Status: $1'],
   [/^\. Trimisă$/, '. Sent'],
 ];

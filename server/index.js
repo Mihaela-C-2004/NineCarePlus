@@ -209,15 +209,44 @@ app.patch('/api/me', auth, (req, res) => {
   res.json(motherBundle(m));
 });
 
-app.delete('/api/me', auth, (req, res) => {
-  const mid = req.mother.id;
+function removeMother(mid) {
   const reqIds = new Set(db.requests.filter((r) => r.motherId === mid).map((r) => r.id));
   for (const key of ['checkins', 'requests', 'appointments', 'labs', 'progress', 'questions', 'sessions'])
     db[key] = db[key].filter((x) => x.motherId !== mid);
   db.messages = db.messages.filter((x) => !reqIds.has(x.requestId));
   db.mothers = db.mothers.filter((m) => m.id !== mid);
-  commit({ type: 'mother', motherId: mid });
+}
+
+app.delete('/api/me', auth, (req, res) => {
+  removeMother(req.mother.id);
+  commit({ type: 'mother', motherId: req.mother.id });
   res.json({ ok: true });
+});
+
+/**
+ * Demo fără cont: fiecare vizitator primește propria copie a Anei (săptămâna 28, cu 14 zile de istoric).
+ * Așa, ce face un vizitator nu le strică demo-ul celorlalți. Copiile mai vechi de 24 de ore se șterg singure.
+ */
+app.post('/api/auth/demo', (_req, res) => {
+  const dayAgo = Date.now() - 24 * 3600 * 1000;
+  db.mothers.filter((m) => m.demoClone && new Date(m.createdAt).getTime() < dayAgo).forEach((m) => removeMother(m.id));
+  if (db.mothers.filter((m) => m.demoClone).length >= 300) return fail(res, 429, 'Demo-ul e plin acum. Încearcă din nou peste câteva minute.');
+
+  const seed = createSeed();
+  const ana = seed.mothers.find((m) => m.email === 'ana@demo.ro');
+  const newId = id();
+  const mine = (x) => x.motherId === ana.id;
+  const requests = seed.requests.filter(mine);
+  const reqIds = new Set(requests.map((r) => r.id));
+  const clone = { ...ana, id: newId, email: `demo-${newId.slice(0, 8)}@demo.ro`, demoClone: true, createdAt: new Date().toISOString() };
+  db.mothers.push(clone);
+  for (const key of ['checkins', 'requests', 'labs', 'progress', 'questions'])
+    db[key].push(...seed[key].filter(mine).map((x) => ({ ...x, motherId: newId })));
+  db.messages.push(...seed.messages.filter((m) => reqIds.has(m.requestId)));
+  const t = token();
+  db.sessions.push({ token: t, motherId: newId });
+  commit({ type: 'mother', motherId: newId });
+  res.status(201).json({ token: t, ...motherBundle(clone) });
 });
 
 app.get('/api/me/export', auth, (req, res) => {
