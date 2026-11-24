@@ -1,6 +1,6 @@
 # 9Care+
 
-**9 luni și tot ce urmează.** Prototip pentru Startup Ideas Competition: aplicația clinicii pentru sarcină și primul an după naștere.
+**9 luni și tot ce urmează.** Prototip: aplicația clinicii pentru sarcină și primul an după naștere.
 
 - **Aplicația mamei** (telefon): Acasă, Starea mea, Asistent, Cursuri, Clinica, plus profilul din colț.
 - **Panoul clinicii** (calculator): cereri live, paciente, administrare.
@@ -13,7 +13,7 @@
 
 ## Pornire
 
-Ai nevoie de [Node.js](https://nodejs.org) (versiunea LTS). În VS Code, deschide folderul și terminalul (Ctrl + `):
+Este nevoie de [Node.js](https://nodejs.org) (versiunea LTS).
 
 ```bash
 npm install
@@ -29,7 +29,7 @@ Codul clinicii la înscriere: **DEMO**. Pe telefon (aceeași rețea Wi-Fi), scan
 
 ## Link de demo, fără cont
 
-Trimiteți oamenilor **`https://adresa-voastra/?demo`** (merge și `/demo`). Intră direct ca **Ana**, în săptămâna 28, cu 14 zile de istoric, fără înscriere.
+**`https://adresa/?demo`** (merge și `/demo`). Intră direct ca **Ana**, în săptămâna 28, cu 14 zile de istoric, fără înscriere.
 
 - Fiecare persoană primește **propria copie** a Anei, deci ce face unul nu le strică demo-ul celorlalți.
 - Copiile apar în panoul clinicii cu eticheta **Demo**; cererile trimise de ele ajung live la clinică.
@@ -52,26 +52,13 @@ Asistentul răspunde **doar** din articolele aprobate (`server/content.js`) și 
 - **Fără cheie API (implicit):** răspunde cu rezumatul articolului cel mai potrivit.
 - **Cu AI:** copiază `.env.example` ca `.env`, completează `ANTHROPIC_API_KEY`, apoi repornește `npm run dev`. Cheia stă doar pe server, nu ajunge în browser. Același model scrie și rezumatul cererilor pentru clinică.
 
-## Fluxul demo pentru juriu
-
-1. Panoul clinicii pe ecranul mare. Un membru al juriului scanează codul QR și își face cont.
-2. **Acasă:** săptămâna de sarcină și fructul.
-3. **Starea mea:** check-in cu durere 8 și somn prost.
-4. **Asistent:** „Am dureri de spate, e normal?” → asistentul nu interpretează și arată butonul de cerere.
-5. Trimite cererea, cu evoluția ultimelor 14 zile atașată.
-6. Pe panou, cererea apare live, cu rezumat și grafic. Când medicul o deschide, pe telefon apare „Văzută”.
-7. Medicul scrie răspunsul și apasă „Trimite și marchează rezolvată”. Pe telefon apare răspunsul.
-
-Înainte de prezentare: **Resetează demo** (sus în panou). Pentru siguranță, țineți un video de rezervă și un hotspot.
-
-## De știut
 
 - **Analizele din poză** (Starea mea → Analize) se citesc în browser; prima citire are nevoie de internet. „Buletinul demo” e un buletin fictiv de test.
 - **Datele** se salvează în `server/data/db.json`. Doar date fictive.
 - **Panoul clinicii nu are login** în prototip. În pilot, personalul intră cu cont propriu.
-- Conținutul (articole, cursuri, ghidul pentru acte) e **demonstrativ** și trebuie verificat de un medic și pe surse oficiale.
+- Conținutul (articole, cursuri, ghidul pentru acte) e **demonstrativ** momentan
 
-## Unde modifici
+## Modificari
 
 | Ce | Fișier |
 |---|---|
@@ -85,7 +72,7 @@ Asistentul răspunde **doar** din articolele aprobate (`server/content.js`) și 
 
 ## Traducerea în engleză
 
-- Textele interfeței se traduc din dicționarul `src/i18n/en.js` (cheia e textul românesc, valoarea e cel englezesc). **Când adăugați un text nou în aplicație, adăugați și perechea lui acolo**; altfel rămâne în română.
+- Textele interfeței se traduc din dicționarul `src/i18n/en.js` (cheia e textul românesc, valoarea e cel englezesc). 
 - Articolele, cursurile și ofertele în engleză sunt în `server/content.en.js`. Asistentul caută în articolele din limba aleasă.
 - Mesajele scrise de mame și de medici nu se traduc: rămân în limba în care au fost scrise.
 
